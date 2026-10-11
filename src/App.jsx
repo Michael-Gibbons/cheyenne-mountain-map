@@ -1,7 +1,7 @@
 import { Component, Suspense, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useProgress } from '@react-three/drei'
-import { Download, Eye, EyeOff, RotateCcw, Share2, X } from 'lucide-react'
+import { ChevronDown, ChevronUp, Download, Eye, EyeOff, RotateCcw, Share2, X } from 'lucide-react'
 import MapScene from './MapScene'
 import { exportArtwork } from './exportArtwork'
 import { createViewLink, readViewLink } from './viewLink'
@@ -40,6 +40,7 @@ function App() {
   const [exportMenu, setExportMenu] = useState(false)
   const [shareLink, setShareLink] = useState('')
   const [shareMessage, setShareMessage] = useState('')
+  const [menuExpanded, setMenuExpanded] = useState(false)
   const trailNames = park ? [...new Set(park.trails.map((trail) => trail.name))].sort() : []
   const selectedLocation = park?.locations.find((location) => `location:${location.id}` === selected)
 
@@ -139,7 +140,19 @@ function App() {
           </Suspense>
         </Canvas>
       </TerrainErrorBoundary>
-      {!presentation && <aside className="map-panel" aria-label="Park layers and locations">
+      {!presentation && <aside className={`map-panel${menuExpanded ? ' expanded' : ''}`} aria-label="Park layers and locations">
+        <button
+          type="button"
+          className="mobile-menu-toggle"
+          aria-label={menuExpanded ? 'Collapse map menu' : 'Expand map menu'}
+          aria-expanded={menuExpanded}
+          aria-controls="map-menu-content"
+          onClick={() => setMenuExpanded(!menuExpanded)}
+        >
+          <span>{selectedLocation?.name || (selected.startsWith('trail:') ? selected.slice('trail:'.length) : 'Trails & locations')}</span>
+          {menuExpanded ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
+        </button>
+        <div id="map-menu-content" className="map-menu-content">
         <fieldset className="layer-controls">
           <legend>Map Layers</legend>
           {[
@@ -171,6 +184,7 @@ function App() {
             onChange={(event) => {
               const value = event.target.value
               setSelected(value)
+              setMenuExpanded(false)
               if (value.startsWith('trail:')) setLayers({ ...layers, trails: true })
               if (value.startsWith('location:')) setLayers({ ...layers, locations: true })
             }}
@@ -197,6 +211,7 @@ function App() {
                     aria-pressed={selected === `trail:${name}`}
                     onClick={() => {
                       setSelected(`trail:${name}`)
+                      setMenuExpanded(false)
                       setLayers({ ...layers, trails: true })
                     }}
                   >
@@ -217,6 +232,7 @@ function App() {
             )}
           </div>
         )}
+        </div>
       </aside>}
       <footer className="map-attribution">
         <a href="https://cpw.state.co.us/state-parks/cheyenne-mountain-state-park" target="_blank" rel="noreferrer">Colorado Parks and Wildlife</a>

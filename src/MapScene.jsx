@@ -218,8 +218,10 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
     }
     const layout = labelLayout.current
     layout.elapsed += delta
+    const panelBounds = !presentation ? document.querySelector('.map-panel')?.getBoundingClientRect() : null
+    const panelHeight = panelBounds?.height || 0
     const contentChanged = layout.selected !== selected || layout.locationsVisible !== layers.locations
-      || layout.count !== labelElements.current.size || layout.hoveredLocation !== hoveredLocation || layout.presentation !== presentation
+      || layout.count !== labelElements.current.size || layout.hoveredLocation !== hoveredLocation || layout.presentation !== presentation || layout.panelHeight !== panelHeight
     const viewportChanged = layout.width !== viewport.width || layout.height !== viewport.height
     if (!contentChanged && !viewportChanged) {
       if (layout.elapsed < 0.1) return
@@ -233,17 +235,21 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
     layout.selected = selected
     layout.hoveredLocation = hoveredLocation
     layout.presentation = presentation
+    layout.panelHeight = panelHeight
     layout.locationsVisible = layers.locations
     layout.count = labelElements.current.size
     if (!layers.locations) return
     const occupied = []
     const projected = layout.projected
+    const behindPanel = (left, top, right = left, bottom = top) => panelBounds
+      && left < panelBounds.right + 8 && right > panelBounds.left - 8
+      && top < panelBounds.bottom + 8 && bottom > panelBounds.top - 8
     const projectedLocations = []
     for (const location of park.locations) {
       projected.copy(location.position).project(camera)
       const x = (projected.x + 1) * viewport.width / 2
       const y = (1 - projected.y) * viewport.height / 2
-      const underPanel = !presentation && (viewport.width <= 600 ? y > viewport.height - 316 : x < 300 && y < 490)
+      const underPanel = behindPanel(x - 14, y - 28, x + 14, y)
       const active = selected === `location:${location.id}`
       if (projected.z < -1 || projected.z > 1 || x < 16 || x > viewport.width - 16 || y < 100 || y > viewport.height - 55 || (underPanel && !active)) continue
       const priority = active ? 0 : hoveredLocation === location.id ? 1 : location.kind === 'Visitor Center' ? 2
@@ -271,8 +277,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
       const left = (projected.x + 1) * viewport.width / 2 - width / 2
       const top = (1 - projected.y) * viewport.height / 2 - 34 - height
       const box = { left: left - 4, top: top - 4, right: left + width + 4, bottom: top + height + 4 }
-      const mobile = viewport.width <= 600
-      const underPanel = !presentation && (mobile ? box.bottom > viewport.height - 290 : box.left < 300 && box.top < 460)
+      const underPanel = behindPanel(box.left, box.top, box.right, box.bottom)
       const outside = projected.z < -1 || projected.z > 1 || box.left < 8 || box.right > viewport.width - 8 || box.top < 75 || box.bottom > viewport.height - 60
       const collision = occupied.some((other) => box.left < other.right && box.right > other.left && box.top < other.bottom && box.bottom > other.top)
       const visible = !outside && !underPanel && !collision
