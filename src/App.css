@@ -136,6 +136,50 @@
   touch-action: none;
 }
 
+.touch-tools {
+  display: none;
+  position: absolute;
+  top: 100px;
+  right: 16px;
+  z-index: 20;
+  gap: 8px;
+}
+
+.touch-tools > div {
+  display: flex;
+  border: 1px solid #c7d7d3;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.touch-tools button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #17382e;
+  touch-action: manipulation;
+}
+
+.touch-tools button[aria-pressed='true'] {
+  background: #17382e;
+  color: #fff;
+}
+
+.touch-tools button:disabled {
+  opacity: 0.4;
+}
+
+@media (pointer: coarse), (max-width: 600px) {
+  .touch-tools {
+    display: flex;
+  }
+}
+
 .terrain-status {
   position: absolute;
   top: 50%;
@@ -401,6 +445,8 @@
     width: auto;
     max-height: 240px;
     padding: 12px;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
   }
 
   .layer-controls {

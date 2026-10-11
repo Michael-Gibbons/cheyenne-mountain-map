@@ -12,6 +12,7 @@
     "demo:record": "node scripts/record-demo.mjs",
     "test": "node --test src/terrain.test.js",
     "test:static": "npm run build && node scripts/test-static.mjs",
+    "test:touch": "node scripts/test-touch.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

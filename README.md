@@ -144,6 +144,17 @@ distance is 4 scene units; camera height is checked against the local DEM surfac
 Panning is not geographically bounded. BVH-accelerated terrain occlusion keeps
 point labels responsive; collision layout is throttled during camera movement.
 
+On touch devices, one finger moves the map and two fingers pinch to zoom and
+slide to pan, without rotating during a pinch. The Move/Rotate icon control
+changes the one-finger gesture; plus/minus buttons provide another way to zoom.
+Desktop mouse gestures are unchanged. The mobile panel scrolls independently
+without chaining scroll gestures to the page. Touch drags do not run hover picks
+or select a trail on release.
+
+With the Vite dev server running, `npm run test:touch` checks these gestures
+using real Chrome touch events in mobile emulation. Like the static smoke test,
+it requires the development-only Playwright Chromium installation.
+
 ## Demo Video
 
 `artifacts/cheyenne-mountain-demo.mp4` is a short, silent functionality reel
