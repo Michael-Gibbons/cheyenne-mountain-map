@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1069,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.828746710973,
+          38.7372669445929
+        ]
+      },
+      "properties": {
+        "FID": 1069,
+        "feature_id": 1824728,
+        "place_id": 19506,
+        "name": "Campground Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Cheyenne Mountain State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1070,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.821118593027,
+          38.7312908859965
+        ]
+      },
+      "properties": {
+        "FID": 1070,
+        "feature_id": 203201,
+        "place_id": 2614,
+        "name": "Limekiln Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Cheyenne Mountain State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1071,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.819614212468,
+          38.7349472127582
+        ]
+      },
+      "properties": {
+        "FID": 1071,
+        "feature_id": 1824727,
+        "place_id": 19505,
+        "name": "Coyote Run Trail",
+        "alt_name": " ",
+        "type": "Interpretive Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Cheyenne Mountain State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    }
+  ]
+}
