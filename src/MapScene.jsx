@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Bvh, Html, Line, MapControls, useCursor } from '@react-three/drei'
 import { useFrame, useLoader, useThree } from '@react-three/fiber'
-import { Box3, Matrix4, MOUSE, TOUCH, Vector3 } from 'three'
+import { Box3, Matrix4, MOUSE, Vector3 } from 'three'
 import { Binoculars, Caravan, DoorOpen, Info, Landmark, MapPin, Signpost, Tent } from 'lucide-react'
 import { applyContourShading, TerrainLoader } from './terrain'
 import { declutterLandmarks, ParkLoader, preparePark } from './park'
@@ -31,7 +31,7 @@ function queueView(controls, camera, target, distance, transition) {
   }
 }
 
-export default function MapScene({ layers, selected, onSelect, onParkReady, presentation, resetVersion, onViewReady, initialView, touchMode, zoomRequest }) {
+export default function MapScene({ layers, selected, onSelect, onParkReady, presentation, resetVersion, onViewReady, initialView }) {
   const terrain = useLoader(TerrainLoader, `${import.meta.env.BASE_URL}terrain/cheyenne-mountain.tif`)
   const collections = useLoader(ParkLoader, `${import.meta.env.BASE_URL}park/`)
   const park = useMemo(() => preparePark(terrain, collections), [terrain, collections])
@@ -49,7 +49,6 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
   }, [])
   const [hoveredLocation, setHoveredLocation] = useState(null)
   const [hoveredTrail, setHoveredTrail] = useState('')
-  const [touchDevice, setTouchDevice] = useState(() => window.matchMedia('(pointer: coarse)').matches)
   useCursor(Boolean(hoveredTrail) && layers.trails)
   const labelLayout = useRef({
     elapsed: 0,
@@ -75,21 +74,6 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
   const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * size.width / size.height)
   const radius = park.radius
   const fitDistance = radius / Math.sin(Math.min(verticalFov, horizontalFov) / 2) * 1.05
-
-  useEffect(() => {
-    const media = window.matchMedia('(pointer: coarse)')
-    const update = () => setTouchDevice(media.matches)
-    media.addEventListener('change', update)
-    return () => media.removeEventListener('change', update)
-  }, [])
-
-  useEffect(() => {
-    if (!zoomRequest.sequence || !controlsRef.current) return
-    const controls = controlsRef.current
-    const { camera } = get()
-    const distance = Math.max(controls.minDistance, Math.min(controls.maxDistance, controls.getDistance() * zoomRequest.factor))
-    queueView(controls, camera, controls.target, distance, cameraTransition)
-  }, [get, zoomRequest])
 
   useEffect(() => {
     const { raycaster } = get()
@@ -127,18 +111,10 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
       setHoveredTrail(object?.name || '')
     }
     const start = (event) => {
-      const alreadyDragging = trailGesture.current.active
       trailGesture.current = { x: event.clientX, y: event.clientY, dragged: false }
-      trailGesture.current.active = true
-      if (alreadyDragging) trailGesture.current.dragged = true
       clearHover()
     }
     const move = (event) => {
-      if (event.pointerType === 'touch') {
-        if (Math.hypot(event.clientX - trailGesture.current.x, event.clientY - trailGesture.current.y) > 4) trailGesture.current.dragged = true
-        clearHover()
-        return
-      }
       if (event.buttons !== 0) {
         const gesture = trailGesture.current
         if (Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 4) gesture.dragged = true
@@ -148,21 +124,16 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
       pointer = { x: event.clientX, y: event.clientY }
       if (timer === null) timer = setTimeout(pick, 80)
     }
-    const end = () => { trailGesture.current.active = false }
     canvas.addEventListener('pointerdown', start, true)
     canvas.addEventListener('pointermove', move)
     canvas.addEventListener('pointerleave', clearHover)
     canvas.addEventListener('pointercancel', clearHover)
-    canvas.addEventListener('pointerup', end)
-    canvas.addEventListener('pointercancel', end)
     return () => {
       if (timer !== null) clearTimeout(timer)
       canvas.removeEventListener('pointerdown', start, true)
       canvas.removeEventListener('pointermove', move)
       canvas.removeEventListener('pointerleave', clearHover)
       canvas.removeEventListener('pointercancel', clearHover)
-      canvas.removeEventListener('pointerup', end)
-      canvas.removeEventListener('pointercancel', end)
     }
   }, [get, park, layers.trails])
 
@@ -419,10 +390,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
         makeDefault
         onStart={handleControlStart}
         enablePan
-        zoomToCursor={!touchDevice}
-        touches={{ ONE: touchMode === 'rotate' ? TOUCH.ROTATE : TOUCH.PAN, TWO: TOUCH.DOLLY_PAN }}
-        panSpeed={touchDevice ? 0.8 : 1}
-        rotateSpeed={touchDevice ? 0.65 : 1}
+        zoomToCursor
         enableDamping
         dampingFactor={0.08}
         screenSpacePanning={false}

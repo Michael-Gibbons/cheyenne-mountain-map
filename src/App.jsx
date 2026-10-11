@@ -1,7 +1,7 @@
 import { Component, Suspense, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useProgress } from '@react-three/drei'
-import { Download, Eye, EyeOff, Move, Orbit, Plus, Minus, RotateCcw, Share2, X } from 'lucide-react'
+import { Download, Eye, EyeOff, RotateCcw, Share2, X } from 'lucide-react'
 import MapScene from './MapScene'
 import { exportArtwork } from './exportArtwork'
 import { createViewLink, readViewLink } from './viewLink'
@@ -40,8 +40,6 @@ function App() {
   const [exportMenu, setExportMenu] = useState(false)
   const [shareLink, setShareLink] = useState('')
   const [shareMessage, setShareMessage] = useState('')
-  const [touchMode, setTouchMode] = useState('pan')
-  const [zoomRequest, setZoomRequest] = useState({ sequence: 0, factor: 1 })
   const trailNames = park ? [...new Set(park.trails.map((trail) => trail.name))].sort() : []
   const selectedLocation = park?.locations.find((location) => `location:${location.id}` === selected)
 
@@ -108,16 +106,6 @@ function App() {
           </div>
         )}
       </nav>
-      <nav className="touch-tools" aria-label="Touch navigation">
-        <div role="group" aria-label="Drag mode">
-          <button type="button" aria-label="Move map" title="Move map" aria-pressed={touchMode === 'pan'} onClick={() => setTouchMode('pan')}><Move size={20} /></button>
-          <button type="button" aria-label="Rotate map" title="Rotate map" aria-pressed={touchMode === 'rotate'} onClick={() => setTouchMode('rotate')}><Orbit size={20} /></button>
-        </div>
-        <div role="group" aria-label="Zoom">
-          <button type="button" aria-label="Zoom in" title="Zoom in" disabled={!view} onClick={() => setZoomRequest({ sequence: zoomRequest.sequence + 1, factor: 0.8 })}><Plus size={20} /></button>
-          <button type="button" aria-label="Zoom out" title="Zoom out" disabled={!view} onClick={() => setZoomRequest({ sequence: zoomRequest.sequence + 1, factor: 1.25 })}><Minus size={20} /></button>
-        </div>
-      </nav>
       {shareLink && (
         <div className="share-result">
           <span role="status">{shareMessage}</span>
@@ -147,8 +135,6 @@ function App() {
               resetVersion={resetVersion}
               onViewReady={setView}
               initialView={initialView}
-              touchMode={touchMode}
-              zoomRequest={zoomRequest}
             />
           </Suspense>
         </Canvas>
