@@ -1,19 +1,24 @@
 import { mkdir, writeFile } from 'node:fs/promises'
+import { parks } from '../src/parks.js'
+
+const park = parks[process.argv[2] || 'cheyenne-mountain']
+if (!park?.cpwName || !park.cpwManager) throw new Error('Provide a configured CPW park id.')
+const escapeSql = (value) => value.replaceAll("'", "''")
 
 const service = 'https://services1.arcgis.com/82YxYqy3f0s2D9c4/arcgis/rest/services'
 const cpwService = 'https://services5.arcgis.com/ttNGmDvKQA7oeDQ3/arcgis/rest/services/CPWAdminData/FeatureServer'
 const layers = [
-  { file: 'boundary', url: `${cpwService}/5`, where: "PropName LIKE '%Cheyenne Mountain%'" },
-  { file: 'trails', url: `${cpwService}/2`, where: "manager = 'Cheyenne Mountain State Park'" },
-  { file: 'facilities', url: `${cpwService}/0`, where: "PROPNAME LIKE '%Cheyenne Mountain%'" },
+  { file: 'boundary', url: `${cpwService}/5`, where: `PropName LIKE '%${escapeSql(park.cpwName)}%'` },
+  { file: 'trails', url: `${cpwService}/2`, where: `manager = '${escapeSql(park.cpwManager)}'` },
+  { file: 'facilities', url: `${cpwService}/0`, where: `PROPNAME LIKE '%${escapeSql(park.cpwName)}%'` },
   {
     file: 'trailheads',
     url: `${service}/Trailheads_COTREX02172021/FeatureServer/0`,
-    where: "manager = 'Cheyenne Mountain State Park'",
+    where: `manager = '${escapeSql(park.cpwManager)}'`,
     snapshot: 'February 17, 2021, according to the source layer name.',
   },
 ]
-const directory = new URL('../public/park/', import.meta.url)
+const directory = new URL(`../public/${park.data}`, import.meta.url)
 const downloads = []
 
 for (const layer of layers) {
@@ -28,7 +33,8 @@ for (const layer of layers) {
   const response = await fetch(queryUrl, { signal: AbortSignal.timeout(120000) })
   if (!response.ok) throw new Error(`${layer.file} download failed: ${response.status}`)
   const collection = await response.json()
-  if (collection.type !== 'FeatureCollection' || !collection.features?.length) {
+  if (collection.type !== 'FeatureCollection' || !Array.isArray(collection.features)
+    || (['boundary', 'trails'].includes(layer.file) && !collection.features.length)) {
     throw new Error(`${layer.file} returned no GeoJSON features: ${JSON.stringify(collection.error)}`)
   }
   if (collection.exceededTransferLimit || collection.properties?.exceededTransferLimit) {
@@ -50,6 +56,7 @@ for (const layer of layers) {
 }
 
 await writeFile(new URL('sources.json', directory), JSON.stringify({
+  park: park.name,
   downloadedAt: new Date().toISOString(),
   coordinateOrder: '[longitude, latitude], WGS84 (EPSG:4326)',
   attribution: 'Colorado Parks and Wildlife / Colorado State Trails Program. See per-layer attribution.',

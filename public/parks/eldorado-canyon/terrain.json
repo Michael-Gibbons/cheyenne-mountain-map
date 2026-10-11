@@ -1,0 +1,28 @@
+{
+  "park": "Eldorado Canyon State Park",
+  "source": "USGS National Map 3D Elevation Program (3DEP)",
+  "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+  "exportUrl": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=json&bbox=468991.7944545053%2C4414400.33428853%2C477865.3936790746%2C4423273.933513099&bboxSR=32613&imageSR=32613&size=257%2C257&format=tiff&pixelType=F32&interpolation=RSP_BilinearInterpolation&renderingRule=%7B%22rasterFunction%22%3A%22None%22%7D",
+  "downloadedAt": "2026-10-11T23:17:01.525Z",
+  "requestedBoundsUtm13N": [
+    468991.7944545053,
+    4414400.33428853,
+    477865.3936790746,
+    4423273.933513099
+  ],
+  "horizontalCrs": "EPSG:32613",
+  "elevationUnits": "meters",
+  "extent": {
+    "xmin": 468991.7944545053,
+    "ymin": 4414400.33428853,
+    "xmax": 477865.3936790746,
+    "ymax": 4423273.933513099,
+    "spatialReference": {
+      "wkid": 32613,
+      "latestWkid": 32613
+    }
+  },
+  "width": 257,
+  "height": 257,
+  "note": "Square extent centered on the CPW park boundary, including all reference layers with 400 meters of padding. Resampled service mosaic; output spacing is not native source resolution. Preserve source vertical datum when comparing GPX elevations."
+}

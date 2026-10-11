@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Bvh, Html, Line, MapControls, useCursor } from '@react-three/drei'
+import { Html, Line, MapControls, useCursor } from '@react-three/drei'
 import { useFrame, useLoader, useThree } from '@react-three/fiber'
 import { Box3, Matrix4, MOUSE, Vector3 } from 'three'
+import { acceleratedRaycast } from 'three-mesh-bvh'
 import { Binoculars, Caravan, DoorOpen, Info, Landmark, MapPin, Signpost, Tent } from 'lucide-react'
 import { applyContourShading, TerrainLoader } from './terrain'
 import { declutterLandmarks, ParkLoader, preparePark } from './park'
@@ -17,7 +18,7 @@ const locationIcons = {
   'Trailhead (2021 reference)': Signpost,
 }
 
-function queueView(controls, camera, target, distance, transition) {
+function queueView(controls, camera, target, distance, transition, invalidate) {
   const direction = camera.position.clone().sub(controls.target).normalize()
   controls.enableDamping = false
   controls.update()
@@ -29,11 +30,12 @@ function queueView(controls, camera, target, distance, transition) {
     startCamera: camera.position.clone(),
     endCamera: direction.multiplyScalar(distance).add(target),
   }
+  invalidate()
 }
 
-export default function MapScene({ layers, selected, onSelect, onParkReady, presentation, resetVersion, onViewReady, initialView }) {
-  const terrain = useLoader(TerrainLoader, `${import.meta.env.BASE_URL}terrain/cheyenne-mountain.tif`)
-  const collections = useLoader(ParkLoader, `${import.meta.env.BASE_URL}park/`)
+export default function MapScene({ layers, selected, onSelect, onParkReady, presentation, resetVersion, onViewReady, initialView, parkConfig }) {
+  const terrain = useLoader(TerrainLoader, `${import.meta.env.BASE_URL}${parkConfig.terrain}`)
+  const collections = useLoader(ParkLoader, `${import.meta.env.BASE_URL}${parkConfig.data}`)
   const park = useMemo(() => preparePark(terrain, collections), [terrain, collections])
   const labelElements = useRef(new Map())
   const markerElements = useRef(new Map())
@@ -76,12 +78,20 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
   const fitDistance = radius / Math.sin(Math.min(verticalFov, horizontalFov) / 2) * 1.05
 
   useEffect(() => {
+    get().invalidate()
+  })
+
+  useEffect(() => {
     const { raycaster } = get()
     const previous = raycaster.params.Line2
+    const previousFirstHit = raycaster.firstHitOnly
+    raycaster.firstHitOnly = true
     raycaster.params.Line2 = { ...previous, threshold: 18 }
     return () => {
       if (previous) raycaster.params.Line2 = previous
       else delete raycaster.params.Line2
+      if (previousFirstHit === undefined) delete raycaster.firstHitOnly
+      else raycaster.firstHitOnly = previousFirstHit
     }
   }, [get])
 
@@ -141,7 +151,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
     if (!controlsRef.current || (initializedPark.current?.park === park && initializedPark.current.resetVersion === resetVersion)) return
     const { camera } = get()
     if (initializedPark.current?.park === park) {
-      queueView(controlsRef.current, camera, park.center, fitDistance, cameraTransition)
+      queueView(controlsRef.current, camera, park.center, fitDistance, cameraTransition, get().invalidate)
       initializedPark.current = { park, resetVersion }
       return
     }
@@ -169,7 +179,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
     if (location) {
       const target = location.position.clone()
       target.y += 0.5
-      queueView(controls, camera, target, Math.max(controls.minDistance, 24), cameraTransition)
+      queueView(controls, camera, target, Math.max(controls.minDistance, 24), cameraTransition, get().invalidate)
       return
     }
     const points = park.trails.filter((trail) => `trail:${trail.name}` === selected).flatMap((trail) => trail.points)
@@ -180,7 +190,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
     const vertical = camera.fov * Math.PI / 180
     const horizontal = 2 * Math.atan(Math.tan(vertical / 2) * viewport.width / viewport.height)
     const distance = Math.max(24, trailRadius / Math.sin(Math.min(vertical, horizontal) / 2) * 1.15)
-    queueView(controls, camera, target, Math.min(controls.maxDistance, distance), cameraTransition)
+    queueView(controls, camera, target, Math.min(controls.maxDistance, distance), cameraTransition, get().invalidate)
   }, [get, park, selected, terrain])
 
   useEffect(() => {
@@ -188,7 +198,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
     onViewReady({ get, park })
   }, [get, onParkReady, onViewReady, park])
 
-  useFrame(({ camera, size: viewport }, delta) => {
+  useFrame(({ camera, size: viewport, invalidate }, delta) => {
     const controls = controlsRef.current
     if (controls) {
       const transition = cameraTransition.current
@@ -202,7 +212,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
         if (fraction === 1) {
           cameraTransition.current = null
           controls.enableDamping = true
-        }
+        } else invalidate()
       }
       const targetHeight = terrain.sampleHeight(controls.target.x, controls.target.z)
       if (targetHeight !== null && controls.target.y < targetHeight + 0.5) {
@@ -293,11 +303,9 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
       <ambientLight intensity={0.7} />
       <directionalLight position={[80, 120, 60]} intensity={2} />
 
-      <Bvh firstHitOnly>
-        <mesh ref={terrainMesh} geometry={terrain.geometry} dispose={null}>
+        <mesh ref={terrainMesh} geometry={terrain.geometry} raycast={acceleratedRaycast} dispose={null}>
           <meshStandardMaterial vertexColors roughness={0.95} onBeforeCompile={applyContourShading} />
         </mesh>
-      </Bvh>
 
       <mesh name="terrain-base" geometry={terrain.baseGeometry} dispose={null}>
         <meshStandardMaterial color="#64736c" roughness={1} flatShading />

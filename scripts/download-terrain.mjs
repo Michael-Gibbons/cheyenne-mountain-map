@@ -1,5 +1,9 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import proj4 from 'proj4'
+import { parks } from '../src/parks.js'
+
+const park = parks[process.argv[2] || 'cheyenne-mountain']
+if (!park?.cpwName) throw new Error('Provide a configured CPW park id.')
 
 const service = 'https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer'
 const projection = '+proj=utm +zone=13 +datum=WGS84 +units=m +no_defs'
@@ -20,7 +24,7 @@ function includeCoordinates(coordinates, isBoundary) {
   coordinates.forEach((coordinate) => includeCoordinates(coordinate, isBoundary))
 }
 for (const name of ['boundary', 'trails', 'facilities', 'trailheads']) {
-  const collection = JSON.parse(await readFile(new URL(`../public/park/${name}.geojson`, import.meta.url), 'utf8'))
+  const collection = JSON.parse(await readFile(new URL(`../public/${park.data}${name}.geojson`, import.meta.url), 'utf8'))
   collection.features.forEach((feature) => includeCoordinates(feature.geometry.coordinates, name === 'boundary'))
 }
 const centerX = (parkBounds[0] + parkBounds[2]) / 2
@@ -52,10 +56,12 @@ if (result.error || !result.href) {
 const imageResponse = await fetch(result.href, { signal: AbortSignal.timeout(120000) })
 if (!imageResponse.ok) throw new Error(`DEM download failed: ${imageResponse.status}`)
 const image = await imageResponse.arrayBuffer()
-const directory = new URL('../public/terrain/', import.meta.url)
+const terrainUrl = new URL(`../public/${park.terrain}`, import.meta.url)
+const directory = new URL('./', terrainUrl)
 await mkdir(directory, { recursive: true })
-await writeFile(new URL('cheyenne-mountain.tif', directory), Buffer.from(image))
-await writeFile(new URL('cheyenne-mountain.json', directory), JSON.stringify({
+await writeFile(terrainUrl, Buffer.from(image))
+await writeFile(new URL(park.id === 'cheyenne-mountain' ? 'cheyenne-mountain.json' : 'terrain.json', directory), JSON.stringify({
+  park: park.name,
   source: 'USGS National Map 3D Elevation Program (3DEP)',
   service,
   exportUrl,

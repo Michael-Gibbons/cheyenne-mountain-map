@@ -1,0 +1,28 @@
+{
+  "park": "Staunton State Park",
+  "source": "USGS National Map 3D Elevation Program (3DEP)",
+  "service": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+  "exportUrl": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?f=json&bbox=460328.1793312883%2C4368286.193148799%2C470994.65362675476%2C4378952.667444266&bboxSR=32613&imageSR=32613&size=257%2C257&format=tiff&pixelType=F32&interpolation=RSP_BilinearInterpolation&renderingRule=%7B%22rasterFunction%22%3A%22None%22%7D",
+  "downloadedAt": "2026-10-11T23:17:03.826Z",
+  "requestedBoundsUtm13N": [
+    460328.1793312883,
+    4368286.193148799,
+    470994.65362675476,
+    4378952.667444266
+  ],
+  "horizontalCrs": "EPSG:32613",
+  "elevationUnits": "meters",
+  "extent": {
+    "xmin": 460328.179331288,
+    "ymin": 4368286.193148799,
+    "xmax": 470994.6536267551,
+    "ymax": 4378952.667444266,
+    "spatialReference": {
+      "wkid": 32613,
+      "latestWkid": 32613
+    }
+  },
+  "width": 257,
+  "height": 257,
+  "note": "Square extent centered on the CPW park boundary, including all reference layers with 400 meters of padding. Resampled service mosaic; output spacing is not native source resolution. Preserve source vertical datum when comparing GPX elevations."
+}

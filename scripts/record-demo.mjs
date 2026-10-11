@@ -127,8 +127,8 @@ async function encode(argumentsList) {
 
 try {
   await page.goto(url)
-  await page.getByRole('combobox').waitFor()
-  await page.waitForFunction(() => document.querySelector('select')?.disabled === false)
+  await page.getByRole('combobox', { name: 'Location or Trail', exact: true }).waitFor()
+  await page.waitForFunction(() => document.querySelector('select[aria-label="Location or Trail"]')?.disabled === false)
   await page.addStyleTag({ content: `
     #demo-caption-panel { position: fixed; bottom: 58px; left: 310px; z-index: 100;
       max-width: 490px; padding: 10px 16px; background: rgba(17, 23, 22, .94); border-left: 3px solid #edb84c;
@@ -184,8 +184,8 @@ try {
   })
   await hold(0.6)
   await page.mouse.click(point.x, point.y)
-  await page.waitForFunction(() => document.querySelector('select').value.startsWith('trail:'))
-  const selectedTrail = (await page.getByRole('combobox').inputValue()).slice('trail:'.length)
+  await page.waitForFunction(() => document.querySelector('select[aria-label="Location or Trail"]').value.startsWith('trail:'))
+  const selectedTrail = (await page.getByRole('combobox', { name: 'Location or Trail', exact: true }).inputValue()).slice('trail:'.length)
   await page.evaluate((name) => { document.querySelector('#demo-caption').textContent = `${name} selected. The camera follows the route.` }, selectedTrail)
   await waitForView()
   await hold(0.6)
@@ -212,7 +212,7 @@ try {
   await moveTo(visitor)
   await hold(0.4)
   await clickControl(visitor)
-  await page.waitForFunction(() => document.querySelector('select').value === 'location:facility-3117')
+  await page.waitForFunction(() => document.querySelector('select[aria-label="Location or Trail"]').value === 'location:facility-3117')
   await waitForView()
   await hold(0.8)
 

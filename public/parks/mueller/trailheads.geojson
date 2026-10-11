@@ -1,0 +1,323 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1117,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.184682848425,
+          38.8945643312903
+        ]
+      },
+      "properties": {
+        "FID": 1117,
+        "feature_id": 203397,
+        "place_id": 2623,
+        "name": "Black Bear Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1118,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.183365757684,
+          38.9024768203108
+        ]
+      },
+      "properties": {
+        "FID": 1118,
+        "feature_id": 63781,
+        "place_id": 1309,
+        "name": "Grouse Mountain Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1119,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.180330807413,
+          38.8789344464229
+        ]
+      },
+      "properties": {
+        "FID": 1119,
+        "feature_id": 63714,
+        "place_id": 6301,
+        "name": "Wapiti Nature Trail",
+        "alt_name": " ",
+        "type": "Interpretive Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1120,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.176364441902,
+          38.8787512615118
+        ]
+      },
+      "properties": {
+        "FID": 1120,
+        "feature_id": 63713,
+        "place_id": 1255,
+        "name": "School Pond Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1121,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.178786042807,
+          38.8789728686243
+        ]
+      },
+      "properties": {
+        "FID": 1121,
+        "feature_id": 63712,
+        "place_id": 1254,
+        "name": "Preacher's Hollow Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1122,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.181408939848,
+          38.8812757755924
+        ]
+      },
+      "properties": {
+        "FID": 1122,
+        "feature_id": 63711,
+        "place_id": 1253,
+        "name": "Outlook Ridge Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1123,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.18274284843,
+          38.8844187207476
+        ]
+      },
+      "properties": {
+        "FID": 1123,
+        "feature_id": 63710,
+        "place_id": 1252,
+        "name": "Lost Pond Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1124,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.179882652475,
+          38.8840897350496
+        ]
+      },
+      "properties": {
+        "FID": 1124,
+        "feature_id": 63709,
+        "place_id": 1251,
+        "name": "Livery Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1125,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.179980435635,
+          38.8862883978139
+        ]
+      },
+      "properties": {
+        "FID": 1125,
+        "feature_id": 63785,
+        "place_id": 1313,
+        "name": "Elk Meadow Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1126,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.181637389551,
+          38.8894939333534
+        ]
+      },
+      "properties": {
+        "FID": 1126,
+        "feature_id": 63784,
+        "place_id": 1312,
+        "name": "Homestead Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1127,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.179035097837,
+          38.8909307854948
+        ]
+      },
+      "properties": {
+        "FID": 1127,
+        "feature_id": 63783,
+        "place_id": 1311,
+        "name": "Peak View Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1128,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.173658153522,
+          38.8819415399976
+        ]
+      },
+      "properties": {
+        "FID": 1128,
+        "feature_id": 63780,
+        "place_id": 14293,
+        "name": "Dragonfly Nature Trail",
+        "alt_name": " ",
+        "type": "Interpretive Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Mueller State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    }
+  ]
+}

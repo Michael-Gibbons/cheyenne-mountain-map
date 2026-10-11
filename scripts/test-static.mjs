@@ -2,16 +2,13 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { chromium } from 'playwright'
+import { parks } from '../src/parks.js'
 
-const assets = [
-  'terrain/cheyenne-mountain.tif',
-  'terrain/cheyenne-mountain.json',
-  'park/boundary.geojson',
-  'park/trails.geojson',
-  'park/facilities.geojson',
-  'park/trailheads.geojson',
-  'park/sources.json',
-]
+const assets = Object.values(parks).flatMap((park) => [
+  park.terrain,
+  park.terrain.replace('.tif', '.json'),
+  ...['boundary.geojson', 'trails.geojson', 'facilities.geojson', 'trailheads.geojson', 'sources.json'].map((name) => `${park.data}${name}`),
+])
 for (const asset of assets) {
   const source = await readFile(new URL(`../public/${asset}`, import.meta.url))
   const built = await readFile(new URL(`../dist/${asset}`, import.meta.url))
@@ -60,9 +57,20 @@ try {
     if (response.ok()) loaded.add(new URL(response.url()).pathname.slice('/map/'.length))
   })
   await page.goto(`${origin}/map/`)
-  await page.waitForFunction(() => document.querySelector('select')?.disabled === false)
-  for (const asset of assets.filter((asset) => asset.endsWith('.tif') || asset.endsWith('.geojson'))) {
+  await page.waitForFunction(() => document.querySelector('select[aria-label="Location or Trail"]')?.disabled === false)
+  for (const park of Object.values(parks).filter((park) => park.id !== 'cheyenne-mountain')) {
+    assert.ok(![...loaded].some((path) => path.startsWith(park.data)), 'Inactive park must not load eagerly')
+  }
+  for (const asset of assets.filter((asset) => !asset.startsWith('parks/') && (asset.endsWith('.tif') || asset.endsWith('.geojson')))) {
     assert.ok(loaded.has(asset), `Runtime did not load local data: ${asset}`)
+  }
+  for (const park of Object.values(parks).filter((park) => park.id !== 'cheyenne-mountain')) {
+    await page.getByRole('combobox', { name: 'Park', exact: true }).selectOption(park.id)
+    await page.waitForFunction(() => document.querySelector('select[aria-label="Location or Trail"]')?.disabled === false)
+    await page.getByRole('heading', { name: `${park.title}${park.subtitle ? ` ${park.subtitle}` : ''}` }).waitFor()
+    for (const asset of [park.terrain, ...['boundary', 'trails', 'facilities', 'trailheads'].map((name) => `${park.data}${name}.geojson`)]) {
+      assert.ok(loaded.has(asset), `Runtime did not load ${park.name} data: ${asset}`)
+    }
   }
   const screenshot = await page.locator('canvas').screenshot()
   const landscapePixels = await page.evaluate(async (base64) => {
@@ -85,7 +93,9 @@ try {
   assert.deepEqual(external, [], 'Runtime attempted external requests')
   assert.deepEqual(failed, [], 'Static asset requests failed')
   assert.deepEqual(errors, [], 'Production browser errors')
-  console.log(JSON.stringify({ localSnapshots: assets.length, externalRequests: external.length, landscapePixels, subfolder: '/map/', result: 'pass' }, null, 2))
+  await page.getByRole('combobox', { name: 'Park', exact: true }).selectOption('cheyenne-mountain')
+  await page.waitForFunction(() => document.querySelector('select[aria-label="Location or Trail"]')?.disabled === false)
+  console.log(JSON.stringify({ localSnapshots: assets.length, externalRequests: external.length, landscapePixels, lazyParkSwitch: true, subfolder: '/map/', result: 'pass' }, null, 2))
 } finally {
   await browser?.close()
   await new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve()))

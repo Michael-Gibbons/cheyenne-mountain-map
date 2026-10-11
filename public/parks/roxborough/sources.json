@@ -1,0 +1,47 @@
+{
+  "park": "Roxborough State Park",
+  "downloadedAt": "2026-10-11T23:05:03.442Z",
+  "coordinateOrder": "[longitude, latitude], WGS84 (EPSG:4326)",
+  "attribution": "Colorado Parks and Wildlife / Colorado State Trails Program. See per-layer attribution.",
+  "sourceSnapshot": "CPWAdminData service snapshot at download time; trailheads use an archived 2021 COTREX layer. Service edit timestamps do not establish individual feature survey dates.",
+  "note": "Public reference trails, not a personal recorded hike. Verify access and closures with CPW. Preserve source attributes and attribution when displaying or redistributing.",
+  "downloads": [
+    {
+      "file": "boundary",
+      "url": "https://services5.arcgis.com/ttNGmDvKQA7oeDQ3/arcgis/rest/services/CPWAdminData/FeatureServer/5",
+      "where": "PropName LIKE '%Roxborough%'",
+      "queryUrl": "https://services5.arcgis.com/ttNGmDvKQA7oeDQ3/arcgis/rest/services/CPWAdminData/FeatureServer/5/query?f=geojson&where=PropName+LIKE+%27%25Roxborough%25%27&outFields=*&outSR=4326&returnGeometry=true",
+      "features": 1,
+      "attribution": "Colorado Parks and Wildlife",
+      "lastServiceDataEdit": 1787840601687
+    },
+    {
+      "file": "trails",
+      "url": "https://services5.arcgis.com/ttNGmDvKQA7oeDQ3/arcgis/rest/services/CPWAdminData/FeatureServer/2",
+      "where": "manager = 'Roxborough State Park'",
+      "queryUrl": "https://services5.arcgis.com/ttNGmDvKQA7oeDQ3/arcgis/rest/services/CPWAdminData/FeatureServer/2/query?f=geojson&where=manager+%3D+%27Roxborough+State+Park%27&outFields=*&outSR=4326&returnGeometry=true",
+      "features": 29,
+      "attribution": "The Colorado State Trails Program (a division of Colorado Parks & Wildlife) coordinated the three year effort to inventory and assess 466 designated trails in 37 Colorado State Parks (as of Aug. 2013). Funding for the initial inventory, assessment and verification of 38 discrete attributes was provided by Great Outdoors Colorado (Colorado lottery funds) and the Federal Highway Administration's Recreational Trail Program (Federal Gasoline Taxes). \n\nThe Colorado State Trails Program acknowledges the dedicated public servants who contributed to the project. This dataset would not exist in it’s current form without the professionalism of countless  CPW  administrators, Park Managers, PRTs, Rangers, regional staffs, contractors and seasonals employees.\n\nOn-going maintenance of this feature class is performed by CPW GIS Unit staff.",
+      "lastServiceDataEdit": 1787840600700
+    },
+    {
+      "file": "facilities",
+      "url": "https://services5.arcgis.com/ttNGmDvKQA7oeDQ3/arcgis/rest/services/CPWAdminData/FeatureServer/0",
+      "where": "PROPNAME LIKE '%Roxborough%'",
+      "queryUrl": "https://services5.arcgis.com/ttNGmDvKQA7oeDQ3/arcgis/rest/services/CPWAdminData/FeatureServer/0/query?f=geojson&where=PROPNAME+LIKE+%27%25Roxborough%25%27&outFields=*&outSR=4326&returnGeometry=true",
+      "features": 30,
+      "attribution": "CPW Technicians and GIS staff, Chris Johnson, Eric Drummond, Bill Gaertner, and Matt Schulz.",
+      "lastServiceDataEdit": 1787840599602
+    },
+    {
+      "file": "trailheads",
+      "url": "https://services1.arcgis.com/82YxYqy3f0s2D9c4/arcgis/rest/services/Trailheads_COTREX02172021/FeatureServer/0",
+      "where": "manager = 'Roxborough State Park'",
+      "snapshot": "February 17, 2021, according to the source layer name.",
+      "queryUrl": "https://services1.arcgis.com/82YxYqy3f0s2D9c4/arcgis/rest/services/Trailheads_COTREX02172021/FeatureServer/0/query?f=geojson&where=manager+%3D+%27Roxborough+State+Park%27&outFields=*&outSR=4326&returnGeometry=true",
+      "features": 2,
+      "attribution": "Colorado Parks and Wildlife",
+      "lastServiceDataEdit": 1615426846417
+    }
+  ]
+}

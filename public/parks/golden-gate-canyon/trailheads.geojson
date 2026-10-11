@@ -1,0 +1,375 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 302,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.36191989475,
+          39.8481337430508
+        ]
+      },
+      "properties": {
+        "FID": 302,
+        "feature_id": 63540,
+        "place_id": 1182,
+        "name": "Mountain Lion Trailhead at Ranch Pond",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.378455543988,
+          39.8461345532551
+        ]
+      },
+      "properties": {
+        "FID": 305,
+        "feature_id": 200202,
+        "place_id": 2176,
+        "name": "Bridge Creek Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 312,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.360378317413,
+          39.8506541315411
+        ]
+      },
+      "properties": {
+        "FID": 312,
+        "feature_id": 63541,
+        "place_id": 1183,
+        "name": "Nott Creek Trailhead",
+        "alt_name": "Mountain Lion Trailhead at Nott Creek",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 320,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.447395082464,
+          39.8581144576512
+        ]
+      },
+      "properties": {
+        "FID": 320,
+        "feature_id": 63531,
+        "place_id": 1173,
+        "name": "Coyote Trailhead",
+        "alt_name": "Bootleg Bottom Trailhead",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 322,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.449233026565,
+          39.8759936559163
+        ]
+      },
+      "properties": {
+        "FID": 322,
+        "feature_id": 63529,
+        "place_id": 1171,
+        "name": "Raccoon Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 324,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.445406625981,
+          39.8500493944671
+        ]
+      },
+      "properties": {
+        "FID": 324,
+        "feature_id": 200057,
+        "place_id": 2177,
+        "name": "Mule Deer Trailhead",
+        "alt_name": "Ole Barn Knoll Trailhead",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 331,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.413974152002,
+          39.865997658867
+        ]
+      },
+      "properties": {
+        "FID": 331,
+        "feature_id": 63539,
+        "place_id": 1181,
+        "name": "Snowshoe Hare Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 342,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.403186065463,
+          39.8647229309106
+        ]
+      },
+      "properties": {
+        "FID": 342,
+        "feature_id": 63532,
+        "place_id": 1174,
+        "name": "Buffalo Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 348,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.408633621326,
+          39.832958910371
+        ]
+      },
+      "properties": {
+        "FID": 348,
+        "feature_id": 63535,
+        "place_id": 1177,
+        "name": "Black Bear Trailhead",
+        "alt_name": "Ralston Roost Trailhead",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 352,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.410069471835,
+          39.831483815598
+        ]
+      },
+      "properties": {
+        "FID": 352,
+        "feature_id": 249565,
+        "place_id": 2871,
+        "name": "Visitor Center Nature Trail",
+        "alt_name": " ",
+        "type": "Interpretive Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 354,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.405247547972,
+          39.836004219852
+        ]
+      },
+      "properties": {
+        "FID": 354,
+        "feature_id": 63533,
+        "place_id": 1175,
+        "name": "Horseshoe Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 359,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.410438933618,
+          39.8311837313168
+        ]
+      },
+      "properties": {
+        "FID": 359,
+        "feature_id": 63538,
+        "place_id": 1180,
+        "name": "Beaver Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 369,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.421979980516,
+          39.8310821005672
+        ]
+      },
+      "properties": {
+        "FID": 369,
+        "feature_id": 63537,
+        "place_id": 1179,
+        "name": "Slough Pond Trailhead",
+        "alt_name": "Beaver Trailhead at Slough Pond",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 379,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.429767376043,
+          39.8355224851933
+        ]
+      },
+      "properties": {
+        "FID": 379,
+        "feature_id": 63534,
+        "place_id": 1176,
+        "name": "Blue Grouse Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Golden Gate Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    }
+  ]
+}

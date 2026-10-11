@@ -1,6 +1,11 @@
+import { parks } from './parks.js'
+
 export function readViewLink(url) {
   try {
-    const value = new URL(url).searchParams.get('view')
+    const link = new URL(url)
+    const parkId = link.searchParams.get('park')
+    if (parkId && !Object.hasOwn(parks, parkId)) return null
+    const value = link.searchParams.get('view')
     if (!value) return null
     const view = JSON.parse(value)
     const vectorValid = (vector) => Array.isArray(vector) && vector.length === 3
@@ -16,8 +21,9 @@ export function readViewLink(url) {
   }
 }
 
-export function createViewLink(url, state, selected, layers, presentation) {
+export function createViewLink(url, state, selected, layers, presentation, parkId) {
   const link = new URL(url)
+  if (parkId) link.searchParams.set('park', parkId)
   const round = (vector) => vector.toArray().map((number) => Math.round(number * 1000) / 1000)
   link.searchParams.set('view', JSON.stringify({
     camera: round(state.camera.position),

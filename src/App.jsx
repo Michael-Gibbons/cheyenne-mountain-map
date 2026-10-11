@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Download, Eye, EyeOff, RotateCcw, Share2, X } f
 import MapScene from './MapScene'
 import { exportArtwork } from './exportArtwork'
 import { createViewLink, readViewLink } from './viewLink'
+import { getPark, parks } from './parks'
 import './App.css'
 
 function TerrainLoading() {
@@ -13,10 +14,14 @@ function TerrainLoading() {
 }
 
 class TerrainErrorBoundary extends Component {
-  state = { hasError: false }
+  state = { hasError: false, resetKey: this.props.resetKey }
 
   static getDerivedStateFromError() {
     return { hasError: true }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    return props.resetKey !== state.resetKey ? { hasError: false, resetKey: props.resetKey } : null
   }
 
   render() {
@@ -29,6 +34,10 @@ class TerrainErrorBoundary extends Component {
 
 function App() {
   const [initialView] = useState(() => readViewLink(window.location.href))
+  const [initialParkId] = useState(() => getPark(new URL(window.location.href).searchParams.get('park')).id)
+  const [parkId, setParkId] = useState(initialParkId)
+  const [restoreInitialView, setRestoreInitialView] = useState(true)
+  const parkConfig = getPark(parkId)
   const [layers, setLayers] = useState(initialView?.layers || { boundary: true, trails: true, locations: true, trees: true })
   const [selected, setSelected] = useState(initialView?.selected || '')
   const [park, setPark] = useState(null)
@@ -50,8 +59,8 @@ function App() {
     setExportError('')
     try {
       const state = view.get()
-      const url = createViewLink(window.location.href, state, selected, layers, presentation)
-      await exportArtwork(state, view.park, layers, { preset, url })
+      const url = createViewLink(window.location.href, state, selected, layers, presentation, parkId)
+      await exportArtwork(state, view.park, layers, { preset, url, parkConfig })
     } catch (error) {
       setExportError(error.message)
     } finally {
@@ -62,7 +71,7 @@ function App() {
   return (
     <main className={`map-app${presentation ? ' presentation' : ''}`}>
       <header className="map-heading">
-        <h1>Cheyenne Mountain<span>State Park</span></h1>
+        <h1>{parkConfig.title}<span>{parkConfig.subtitle}</span></h1>
       </header>
       <nav className="map-tools" aria-label="Artwork controls">
         <button type="button" title={presentation ? 'Show controls' : 'Presentation mode'} aria-label={presentation ? 'Show controls' : 'Presentation mode'} aria-pressed={presentation} onClick={() => setPresentation(!presentation)}>
@@ -87,7 +96,7 @@ function App() {
           aria-label="Share this view"
           disabled={!view}
           onClick={async () => {
-            const url = createViewLink(window.location.href, view.get(), selected, layers, presentation)
+            const url = createViewLink(window.location.href, view.get(), selected, layers, presentation, parkId)
             window.history.replaceState(null, '', url)
             setShareLink(url)
             try {
@@ -116,18 +125,21 @@ function App() {
           <input aria-label="View link" value={shareLink} readOnly onFocus={(event) => event.target.select()} />
         </div>
       )}
-      <TerrainErrorBoundary>
+      <TerrainErrorBoundary resetKey={parkId}>
         <Canvas
+          frameloop="demand"
           camera={{ position: [210, 190, 210], fov: 55, near: 0.1, far: 2000 }}
           dpr={[1, 2]}
           fallback={<p className="terrain-status">WebGL is required to display this map.</p>}
           onPointerMissed={(event) => {
             if (event.button === 0) setSelected('')
           }}
-          aria-label="Interactive 3D terrain map of Cheyenne Mountain State Park"
+          aria-label={`Interactive 3D terrain map of ${parkConfig.name}`}
         >
           <Suspense fallback={null}>
             <MapScene
+              key={parkId}
+              parkConfig={parkConfig}
               layers={layers}
               selected={selected}
               onSelect={setSelected}
@@ -135,7 +147,7 @@ function App() {
               presentation={presentation}
               resetVersion={resetVersion}
               onViewReady={setView}
-              initialView={initialView}
+              initialView={restoreInitialView ? initialView : null}
             />
           </Suspense>
         </Canvas>
@@ -153,6 +165,32 @@ function App() {
           {menuExpanded ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
         </button>
         <div id="map-menu-content" className="map-menu-content">
+        <label className="place-select park-select">
+          <span>Park</span>
+          <select
+            aria-label="Park"
+            value={parkId}
+            disabled={exporting}
+            onChange={(event) => {
+              const next = event.target.value
+              setParkId(next)
+              setRestoreInitialView(false)
+              setPark(null)
+              setView(null)
+              setSelected('')
+              setResetVersion(0)
+              setShareLink('')
+              setExportMenu(false)
+              setMenuExpanded(false)
+              const url = new URL(window.location.href)
+              url.searchParams.set('park', next)
+              url.searchParams.delete('view')
+              window.history.replaceState(null, '', url)
+            }}
+          >
+            {Object.values(parks).map((config) => <option key={config.id} value={config.id}>{config.name}</option>)}
+          </select>
+        </label>
         <fieldset className="layer-controls">
           <legend>Map Layers</legend>
           {[
@@ -179,6 +217,7 @@ function App() {
         <label className="place-select">
           <span>Location or Trail</span>
           <select
+            aria-label="Location or Trail"
             value={selected}
             disabled={!park}
             onChange={(event) => {
@@ -235,7 +274,7 @@ function App() {
         </div>
       </aside>}
       <footer className="map-attribution">
-        <a href="https://cpw.state.co.us/state-parks/cheyenne-mountain-state-park" target="_blank" rel="noreferrer">Colorado Parks and Wildlife</a>
+        <a href={parkConfig.url} target="_blank" rel="noreferrer">{parkConfig.attribution}</a>
         <span>USGS 3DEP / Illustrative map, not for navigation</span>
       </footer>
       {exportError && <p className="export-error" role="alert">{exportError}</p>}

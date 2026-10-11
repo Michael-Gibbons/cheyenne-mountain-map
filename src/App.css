@@ -223,6 +223,10 @@
   gap: 8px;
 }
 
+.park-select {
+  margin-bottom: 16px;
+}
+
 .place-select select {
   width: 100%;
   min-width: 0;

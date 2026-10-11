@@ -1,0 +1,63 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1039,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.063726509434,
+          39.4294914070634
+        ]
+      },
+      "properties": {
+        "FID": 1039,
+        "feature_id": 63614,
+        "place_id": 1206,
+        "name": "Willow Creek Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Roxborough State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1040,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.068682614531,
+          39.4291155609612
+        ]
+      },
+      "properties": {
+        "FID": 1040,
+        "feature_id": 203905,
+        "place_id": 2637,
+        "name": "Roxborough State Park Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Roxborough State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    }
+  ]
+}

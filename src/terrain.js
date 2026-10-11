@@ -1,6 +1,7 @@
 import { fromArrayBuffer } from 'geotiff'
 import proj4 from 'proj4'
 import { BufferGeometry, Color, Float32BufferAttribute, Loader, PlaneGeometry, Vector3 } from 'three'
+import { MeshBVH } from 'three-mesh-bvh'
 
 const projection = '+proj=utm +zone=13 +datum=WGS84 +units=m +no_defs'
 const sceneUnitsPerMeter = 0.025
@@ -106,6 +107,7 @@ export async function createTerrain(buffer) {
   geometry.computeVertexNormals()
   geometry.computeBoundingBox()
   geometry.computeBoundingSphere()
+  geometry.boundsTree = new MeshBVH(geometry, { indirect: true })
 
   function sampleElevation(easting, northing) {
     if (easting < west || easting > east || northing < south || northing > north) {

@@ -1,0 +1,115 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 277,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.294241485439,
+          39.9307482213145
+        ]
+      },
+      "properties": {
+        "FID": 277,
+        "feature_id": 63751,
+        "place_id": 1293,
+        "name": "Eldorado Canyon Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Eldorado Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 289,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.290104865787,
+          39.9294792392484
+        ]
+      },
+      "properties": {
+        "FID": 289,
+        "feature_id": 63750,
+        "place_id": 1292,
+        "name": "Fowler/Rattlesnake Gulch Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Eldorado Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1075,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.339951211641,
+          39.9305115106224
+        ]
+      },
+      "properties": {
+        "FID": 1075,
+        "feature_id": 202406,
+        "place_id": 2492,
+        "name": "Crescent Meadows Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "no",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Eldorado Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1076,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.281640571816,
+          39.9314939132769
+        ]
+      },
+      "properties": {
+        "FID": 1076,
+        "feature_id": 1824837,
+        "place_id": 19508,
+        "name": "Eldorado Springs Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "no",
+        "manager": "Eldorado Canyon State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    }
+  ]
+}

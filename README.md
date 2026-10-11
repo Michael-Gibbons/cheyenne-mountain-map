@@ -5,6 +5,75 @@ React, Vite, React Three Fiber, and Drei. Use 2 spaces for indentation.
 An interactive landscape portrait of the park, intended as an art piece rather
 than a navigation or live trail-status tool.
 
+## Park Selector
+
+Choose a park from the layer panel (expand the compact menu on mobile).
+Cheyenne Mountain remains the default with its existing data and presentation.
+The collection includes Roxborough, Mueller, Golden Gate Canyon, Eldorado Canyon,
+and Staunton alongside Cheyenne Mountain. Garden of the Gods was removed.
+Only the selected park's DEM and GeoJSON are fetched; switching clears the
+previous park's selection and camera view. Shared URLs include a `park` parameter,
+and PNG titles, filenames, legends, attribution, and QR links follow that park.
+
+Roxborough files are saved under `public/parks/roxborough`: a park-centered USGS
+3DEP DEM, one CPW boundary, 29 CPW-managed trail segments with 14 distinct names,
+30 facility points, and two archived trailheads. The current raster is 257 by
+257 samples, approximately 26 meters apart, with about 570 meters of relief.
+The app displays a curated subset of facilities, not operational locations.
+The route inventory includes managed approaches/connectors as well as visitor
+trails; segments are not distinct hikes. CPW service timestamps are not individual
+survey dates, and trailheads remain February 2021 references. Verify against the
+park's official map before presenting the dataset as current trail information.
+
+`sources.json` records the source queries, attribution, limitations, and DEM
+extent. Refresh manually with `npm run roxborough:download`; it is not a deployment
+step. All parks work from local static files if upstream providers disappear.
+`npm run test:static` checks the full registry and lazy loading with external traffic blocked.
+
+### Screened Additions
+
+| Park | Trail Segments | Named Routes | DEM Relief | Export Sample Spacing |
+| --- | ---: | ---: | ---: | ---: |
+| Mueller | 97 | 39 | 425 m | 28.0 m |
+| Golden Gate Canyon | 44 | 24 | 1,054 m | 52.9 m |
+| Eldorado Canyon | 12 | 7 | 1,033 m | 34.5 m |
+| Staunton | 80 | 27 | 914 m | 41.5 m |
+
+All have populated CPW boundaries, named trails, and complete coverage of source
+coordinates by a local DEM. Acceptance tests require at least five distinct route
+names, at least 200 meters of relief, and no more than 60 meters between output
+samples. This is resampling density, not native source resolution. Golden Gate is
+best treated as an overview; Eldorado's vertical cliffs and overhangs are not
+represented by a DEM. Managed approaches and climbing-access routes may appear.
+These checks establish technical suitability, not an independent comparison to
+each official park map or current closures. Trailheads are archived 2021 data;
+service edit timestamps do not establish individual feature survey dates.
+
+The WebGL canvas persists across switches; cached DEMs retain their BVH indexes,
+and each terrain mesh uses accelerated raycasting explicitly. Idle scenes render
+on demand; controls and camera transitions request frames while moving. With the
+Vite server running, `npm run test:switching` checks repeated switching, canvas/BVH
+identity, raycast cost, idle render work, and frame pacing.
+
+### Adding More CPW Parks
+
+Add an entry to `src/parks.js` with unique `id`, presentation/attribution fields,
+local `data` and `terrain` paths, plus `cpwName` and `cpwManager` matching the CPW
+property and trail fields. Then run:
+
+```bash
+node scripts/download-park-data.mjs <park-id>
+node scripts/download-terrain.mjs <park-id>
+```
+
+Without an argument both commands retain Cheyenne Mountain's existing paths.
+The terrain downloader fits all downloaded layer coordinates with padding, and
+the static smoke test iterates the registry automatically. Add data-quality
+checks for each new park's trail names and DEM coverage before including it.
+No park-specific downloader is required; non-CPW sources can be normalized to
+the same four GeoJSON FeatureCollections and an EPSG:32613 DEM in a separate
+acquisition adapter. Keep runtime rendering separate from data acquisition.
+
 ## Run
 
 ```bash
@@ -36,15 +105,15 @@ subsequent recordings. Playwright and FFmpeg are development-only dependencies.
 
 ## Independent Static Hosting
 
-All required map data is already downloaded and stored in `public/terrain` and
-`public/park`. The application reads these local snapshots, never the USGS or
+All required map data is already downloaded and stored in `public/terrain`,
+`public/park`, and `public/parks`. The application reads local snapshots, never the USGS or
 ArcGIS source services at runtime. Icons, shaders, QR encoding, trees, and
 JavaScript dependencies are bundled locally; there are no CDN or online-font
 requirements. Source URLs in metadata and the CPW attribution link are references,
 not loading dependencies.
 
 Build with `npm ci` followed by `npm run build`, and deploy the entire `dist`
-directory, including `assets`, `terrain`, and `park`. Do not deploy only the HTML
+directory, including `assets`, `terrain`, `park`, and `parks`. Do not deploy only the HTML
 or JavaScript bundle. Relative asset paths support a site root or a subfolder.
 Serve through HTTP(S), not by double-clicking the HTML file. No backend, map API
 key, or source-service availability is required. Avoid an HTML fallback for

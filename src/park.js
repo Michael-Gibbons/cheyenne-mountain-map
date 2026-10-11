@@ -117,7 +117,8 @@ export class ParkLoader extends Loader {
       const response = await fetch(`${resolvedUrl}${name}.geojson`)
       if (!response.ok) throw new Error(`Park ${name} request failed: ${response.status}`)
       const collection = await response.json()
-      if (collection.type !== 'FeatureCollection' || !collection.features?.length) {
+      if (collection.type !== 'FeatureCollection' || !Array.isArray(collection.features)
+        || (['boundary', 'trails'].includes(name) && !collection.features.length)) {
         throw new Error(`Park ${name} is not a populated GeoJSON FeatureCollection.`)
       }
       return [name, collection]

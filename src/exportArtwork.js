@@ -2,9 +2,11 @@ import { Raycaster, Vector2 } from 'three'
 import QRCode from 'qrcode'
 import { declutterLandmarks } from './park'
 import { isPublishedUrl } from './viewLink'
+import { getPark } from './parks'
 
 export async function exportArtwork(state, park, layers, options = {}) {
   const { gl, scene, size } = state
+  const parkConfig = options.parkConfig || getPark('cheyenne-mountain')
   const camera = state.camera.clone()
   const overview = options.preset === 'overview'
   const aspect = overview ? 1.6 : size.width / size.height
@@ -112,7 +114,7 @@ export async function exportArtwork(state, park, layers, options = {}) {
   context.fillStyle = '#e5eee6'
   context.font = '32px Georgia, serif'
   const includeQr = options.url && isPublishedUrl(options.url)
-  context.fillText('Cheyenne Mountain State Park', 36, 58, width - (includeQr ? 180 : 72))
+  context.fillText(parkConfig.name, 36, 58, width - (includeQr ? 180 : 72))
   if (trailLegend.length) {
     context.font = "20px 'Trebuchet MS', sans-serif"
     context.fillText('Trails', 36, height + 150)
@@ -139,14 +141,14 @@ export async function exportArtwork(state, park, layers, options = {}) {
     context.drawImage(qr, width - 124, 12, 88, 88)
   }
   context.font = "14px 'Trebuchet MS', sans-serif"
-  context.fillText('Colorado Parks and Wildlife / USGS 3DEP', 36, output.height - 40, width - 72)
-  context.fillText('Not for navigation. Trees are artistic, not surveyed. Trailheads: 2021 reference.', 36, output.height - 18, width - 72)
+  context.fillText(`${parkConfig.attribution} / USGS 3DEP`, 36, output.height - 40, width - 72)
+  context.fillText(`Not for navigation. Trees are artistic, not surveyed. ${parkConfig.footer}`, 36, output.height - 18, width - 72)
   const blob = await new Promise((resolve) => output.toBlob(resolve, 'image/png'))
   if (!blob) throw new Error('The browser could not create the image.')
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = 'cheyenne-mountain-landscape.png'
+  link.download = `${parkConfig.id}-landscape.png`
   link.click()
   setTimeout(() => URL.revokeObjectURL(url), 1000)
   return { width: output.width, height: output.height }

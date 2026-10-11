@@ -6,7 +6,9 @@ import { applyContourShading, createTerrain } from './terrain.js'
 import { declutterLandmarks, drapePath, overlayOffset, preparePark } from './park.js'
 import { createForest, treeClearance } from './forest.js'
 import { createViewLink, isPublishedUrl, readViewLink } from './viewLink.js'
-import { Vector3 } from 'three'
+import { Mesh, MeshBasicMaterial, Raycaster, Vector3 } from 'three'
+import { acceleratedRaycast } from 'three-mesh-bvh'
+import { getPark, parks } from './parks.js'
 
 const bytes = await readFile(new URL('../public/terrain/cheyenne-mountain.tif', import.meta.url))
 const terrain = await createTerrain(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength))
@@ -186,10 +188,96 @@ test('view links round-trip camera and layers and reject invalid camera data', (
   assert.deepEqual(view.layers, layers)
   assert.equal(view.selected, 'trail:Talon Trail')
   assert.equal(readViewLink('https://example.org/?view=broken'), null)
+  const retiredPark = new URL(url)
+  retiredPark.searchParams.set('park', 'garden-of-the-gods')
+  assert.equal(readViewLink(retiredPark.href), null)
   const invalid = new URL(url)
   invalid.searchParams.set('view', JSON.stringify({ ...view, camera: [0, -100, 0] }))
   assert.equal(readViewLink(invalid.href), null)
   assert.equal(isPublishedUrl('http://127.0.0.1:5173'), false)
   assert.equal(isPublishedUrl('http://192.168.1.2'), false)
   assert.equal(isPublishedUrl('https://example.org/map'), true)
+})
+
+test('Roxborough CPW layers fit their independent terrain and keep park identity in links', async () => {
+  const config = getPark('roxborough')
+  const bytes = await readFile(new URL(`../public/${config.terrain}`, import.meta.url))
+  const roxboroughTerrain = await createTerrain(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength))
+  try {
+    const collections = Object.fromEntries(await Promise.all(['boundary', 'trails', 'facilities', 'trailheads'].map(async (name) => [
+      name, JSON.parse(await readFile(new URL(`../public/${config.data}${name}.geojson`, import.meta.url), 'utf8')),
+    ])))
+    const roxborough = preparePark(roxboroughTerrain, collections)
+    assert.ok(roxboroughTerrain.maxHeight > 5)
+    assert.ok(roxborough.trails.length > 20)
+    assert.ok(roxborough.trails.every((trail) => trail.name !== 'Unnamed trail'))
+    assert.ok(roxborough.locations.some((location) => location.kind === 'Visitor Center'))
+    assert.ok(collections.facilities.features.length > 0)
+    function checkCoordinates(coordinates) {
+      if (typeof coordinates[0] === 'number') assert.ok(roxboroughTerrain.geographicToScene(...coordinates), 'Roxborough coordinate outside DEM')
+      else coordinates.forEach(checkCoordinates)
+    }
+    for (const collection of Object.values(collections)) collection.features.forEach((feature) => checkCoordinates(feature.geometry.coordinates))
+    assert.ok(Math.abs(roxborough.center.x) < 0.001 && Math.abs(roxborough.center.z) < 0.001)
+    const state = { camera: { position: new Vector3(40, 30, 20) }, controls: { target: new Vector3(0, 0, 0) } }
+    const url = createViewLink('https://example.org/map', state, '', { boundary: true, trails: true, locations: true, trees: true }, false, config.id)
+    assert.equal(new URL(url).searchParams.get('park'), config.id)
+    assert.equal(getPark('unknown').id, 'cheyenne-mountain')
+  } finally {
+    roxboroughTerrain.geometry.dispose()
+    roxboroughTerrain.baseGeometry.dispose()
+  }
+})
+
+for (const config of Object.values(parks).filter((park) => !['cheyenne-mountain', 'roxborough'].includes(park.id))) {
+  test(`${config.name} meets terrain and named-trail acceptance criteria`, async () => {
+    const bytes = await readFile(new URL(`../public/${config.terrain}`, import.meta.url))
+    const candidate = await createTerrain(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength))
+    try {
+      const collections = Object.fromEntries(await Promise.all(['boundary', 'trails', 'facilities', 'trailheads'].map(async (name) => [
+        name, JSON.parse(await readFile(new URL(`../public/${config.data}${name}.geojson`, import.meta.url), 'utf8')),
+      ])))
+      assert.ok(collections.boundary.features.length > 0)
+      assert.ok(collections.trails.features.length >= 5)
+      assert.ok(collections.trails.features.every((feature) => feature.properties.name?.trim()))
+      const names = new Set(collections.trails.features.map((feature) => feature.properties.name.trim()))
+      assert.ok(names.size >= 5)
+      const spacing = (candidate.bounds[2] - candidate.bounds[0]) / candidate.width
+      assert.ok(spacing <= 60, 'Export sampling is too coarse for this scene')
+      const relief = candidate.maxElevation - candidate.minElevation
+      assert.ok(relief >= 200, 'Terrain relief is too modest for the landscape portrait')
+      function check(coordinates) {
+        if (typeof coordinates[0] === 'number') assert.ok(candidate.geographicToScene(...coordinates), 'Geometry extends outside the local DEM')
+        else coordinates.forEach(check)
+      }
+      for (const collection of Object.values(collections)) collection.features.forEach((feature) => check(feature.geometry.coordinates))
+      const park = preparePark(candidate, collections)
+      assert.ok(park.trails.length >= collections.trails.features.length)
+      assert.ok(candidate.geometry.boundsTree)
+      console.log(JSON.stringify({ park: config.name, trailSegments: collections.trails.features.length, namedRoutes: names.size, facilities: collections.facilities.features.length, trailheads: collections.trailheads.features.length, reliefMeters: Math.round(relief), sampleSpacingMeters: Math.round(spacing * 10) / 10 }))
+    } finally {
+      candidate.geometry.dispose()
+      candidate.baseGeometry.dispose()
+    }
+  })
+}
+
+test('cached terrain keeps accelerated raycasts when a new mesh is mounted', () => {
+  const tree = terrain.geometry.boundsTree
+  assert.ok(tree)
+  const material = new MeshBasicMaterial()
+  try {
+    const raycaster = new Raycaster(new Vector3(0, 100, 0), new Vector3(0, -1, 0))
+    raycaster.firstHitOnly = true
+    for (let mount = 0; mount < 3; mount++) {
+      const mesh = new Mesh(terrain.geometry, material)
+      mesh.raycast = acceleratedRaycast
+      const hits = raycaster.intersectObject(mesh)
+      assert.equal(hits.length, 1)
+      assert.equal(mesh.geometry.boundsTree, tree)
+      assert.ok(Math.abs(hits[0].point.y - terrain.sampleHeight(0, 0)) < 0.00001)
+    }
+  } finally {
+    material.dispose()
+  }
 })

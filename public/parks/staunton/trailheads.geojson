@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1152,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.380712486694,
+          39.4945927020862
+        ]
+      },
+      "properties": {
+        "FID": 1152,
+        "feature_id": 1825604,
+        "place_id": 19550,
+        "name": "Mason Creek Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": "yes",
+        "manager": "Staunton State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1153,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.382095885312,
+          39.4972671593693
+        ]
+      },
+      "properties": {
+        "FID": 1153,
+        "feature_id": 1825602,
+        "place_id": 19548,
+        "name": "Davis Ponds Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": " ",
+        "manager": "Staunton State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2156,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -105.379711346716,
+          39.4998778666535
+        ]
+      },
+      "properties": {
+        "FID": 2156,
+        "feature_id": 201693,
+        "place_id": 2384,
+        "name": "Ranch Hand Trailhead",
+        "alt_name": " ",
+        "type": "Trailhead",
+        "bathrooms": "yes",
+        "fee": "yes",
+        "water": " ",
+        "manager": "Staunton State Park",
+        "INPUT_DATE": 1605830400000,
+        "EDIT_DATE": 1605830400000,
+        "winter_act": " "
+      }
+    }
+  ]
+}

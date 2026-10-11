@@ -9,9 +9,11 @@
     "lint": "oxlint",
     "terrain:download": "node scripts/download-terrain.mjs",
     "park:download": "node scripts/download-park-data.mjs",
+    "roxborough:download": "node scripts/download-park-data.mjs roxborough && node scripts/download-terrain.mjs roxborough",
     "demo:record": "node scripts/record-demo.mjs",
     "test": "node --test src/terrain.test.js",
     "test:static": "npm run build && node scripts/test-static.mjs",
+    "test:switching": "node scripts/test-switching.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -23,7 +25,8 @@
     "qrcode": "^1.5.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "three": "^0.186.1"
+    "three": "^0.186.1",
+    "three-mesh-bvh": "^0.9.16"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
