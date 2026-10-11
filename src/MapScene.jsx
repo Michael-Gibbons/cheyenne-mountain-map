@@ -346,6 +346,7 @@ export default function MapScene({ layers, selected, onSelect, onParkReady, pres
         ))}
       </group>
 
+
       {layers.locations && (
         <group name="park-locations">
           {park.locations.map((location) => {

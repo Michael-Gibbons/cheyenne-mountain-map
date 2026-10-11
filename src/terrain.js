@@ -91,6 +91,7 @@ export async function createTerrain(buffer) {
   const lowColor = new Color('#668e78')
   const middleColor = new Color('#9cad95')
   const highColor = new Color('#e0e6df')
+  const meadowColor = new Color('#afbc87')
   const color = new Color()
   for (let index = 0; index < elevations.length; index++) {
     const elevation = elevations[index]
@@ -101,6 +102,10 @@ export async function createTerrain(buffer) {
     } else {
       color.copy(middleColor).lerp(highColor, (fraction - 0.5) * 2)
     }
+    const sceneX = positions.getX(index)
+    const sceneZ = positions.getZ(index)
+    const meadow = Math.max(0, Math.sin(sceneX * 0.12 + Math.cos(sceneZ * 0.1)) * Math.cos(sceneZ * 0.09))
+    color.lerp(meadowColor, meadow * Math.max(0, 1 - fraction * 1.6) * 0.22)
     color.toArray(colors, index * 3)
   }
   geometry.setAttribute('color', new Float32BufferAttribute(colors, 3))

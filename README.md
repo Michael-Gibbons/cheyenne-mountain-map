@@ -239,6 +239,7 @@ approximate, since browser video timestamps can differ from wall-clock timing.
 - Selecting a trail frames its complete geometry and dims other routes.
 - Landmark names appear on hover or selection; icons remain terrain-anchored.
 - Camera transitions honor the browser's reduced-motion preference.
+- Trail selection uses the existing static emphasis; there is no animated tracing overlay.
 
 The terrain has side walls following its exact DEM rim and a closed underside
 2 scene units below the minimum elevation, giving it a sculpted relief-model
@@ -247,11 +248,18 @@ priority-based screen spacing: selection comes first, and individual markers
 are revealed as you zoom closer. Hidden icons are also excluded from PNG exports.
 
 The charcoal backdrop emphasizes the relief. The optional Artistic trees layer
-adds up to 1,000 low-poly conifers in two instanced draw calls. Their deterministic
+adds up to 1,000 mixed conifers and rounded broadleaf trees in three instanced draw calls. Their deterministic
 placement follows DEM heights, avoids steep slopes, and keeps trails and visitor
 locations clear. Tree positions, sizes, and forest patches are invented visual
 decoration, not surveyed vegetation or habitat data. PNG exports include this
 layer when enabled and retain the artificial-tree notice.
+
+Subtle meadow color variation is part of the artistic terrain treatment, not
+surveyed vegetation or land cover. No additional panel controls are introduced;
+both tree types use the existing Artistic trees toggle. Water surfaces are not
+included because the bundled park snapshots do not contain verified water polygons.
+With the Vite server running, `npm run test:artwork` checks mixed-tree rendering,
+trail selection without animated overlays, return to idle, reduced motion, and mobile overflow.
 
 The PNG includes attribution and an illustrative-map notice. On public HTTP(S)
 hosts it includes a QR code linking back to the view, or the park overview for

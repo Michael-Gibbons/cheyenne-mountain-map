@@ -48,6 +48,7 @@ export function createForest(terrain, park) {
       radius: 0.23 + variation * 0.17,
       rotation: MathUtils.seededRandom(7414 + index * 4) * Math.PI * 2,
       shade: variation,
+      kind: Math.sin(sceneX * 0.09 + sceneZ * 0.12) > 0.25 && variation > 0.35 ? 'broadleaf' : 'conifer',
     })
   }
   return trees

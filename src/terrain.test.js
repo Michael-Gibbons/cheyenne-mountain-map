@@ -140,6 +140,8 @@ test('park overlays follow mesh triangles and preserve multipart trails and boun
   assert.ok(!park.locations.some((location) => location.name === 'Maintenance Shop'))
   const trees = createForest(terrain, park)
   assert.ok(trees.length > 200 && trees.length <= 1000)
+  assert.ok(trees.some((tree) => tree.kind === 'broadleaf'))
+  assert.ok(trees.some((tree) => tree.kind === 'conifer'))
   assert.deepEqual(createForest(terrain, park), trees)
   const trailPoints = park.trails.flatMap((trail) => trail.points)
   for (const tree of trees) {

@@ -14,6 +14,7 @@
     "test": "node --test src/terrain.test.js",
     "test:static": "npm run build && node scripts/test-static.mjs",
     "test:switching": "node scripts/test-switching.mjs",
+    "test:artwork": "node scripts/test-artwork.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
